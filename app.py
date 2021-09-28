@@ -1,12 +1,12 @@
 import re
 import telegram
 from flask import Flask, request
-from credentials import bot_token
-#import playlist_processing
-#app = Flask(__name__)
+from credentials import bot_token, URL
+import playlist_processing
+app = Flask(__name__)
 
 bot = telegram.Bot(token=bot_token)
-#@app.route('/{}'.format(bot_token), methods=['POST'])
+@app.route('/{}'.format(bot_token), methods=['POST'])
 def bot_interaction():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     chat_id = update.message.chat.id
@@ -22,7 +22,7 @@ def bot_interaction():
 
         bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
 
-#@app.route('/set_webhook', methods=['GET', 'POST'])
+@app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=bot_token))
     if s:
@@ -31,13 +31,13 @@ def set_webhook():
         return "webhook setup failed"
 
 
-#@app.route('/')
+@app.route('/')
 def index():
-    bot_interaction()
     return '.'
 
-if __name__ == '__main__':
-    s = bot.setWebhook('{URL}{HOOK}'.format(URL="http://127.0.0.1:5000", HOOK=bot_token))
+app.run()
+#if __name__ == '__main__':
+    #s = bot.setWebhook('{URL}{HOOK}'.format(URL="http://127.0.0.1:5000", HOOK=bot_token))
 
 #    # bot_interaction()
 #     updates = bot.get_updates()
