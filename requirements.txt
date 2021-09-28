@@ -1,2 +1,6 @@
+python_telegram_bot==13.7
 requests==2.26.0
 google_api_python_client==2.22.0
+telegram==0.0.1
+
+Flask~=2.0.1
