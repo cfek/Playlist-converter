@@ -1,8 +1,10 @@
 import logging
-import re
 import os
-from telegram import Update, ForceReply
+import re
+
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+
 import playlist_processing
 
 # Enable logging
@@ -12,16 +14,18 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-#define answer to a /start command
+
+# define answer to a /start command
 def start(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /start is issued."""
     update.message.reply_text("""   Hi, this bot is for converting your Spotify playlist into a YouTube one. 
     Simply send a spotify playlist link to get started. """)
 
-#define logic behind the reply
+
+# define logic behind the reply
 def check(message):
-    if_playlist = re.search("https://open.spotify.com/playlist/", message)
-    if if_playlist:
+    if_playlist_link = re.search("https://open.spotify.com/playlist/", message)
+    if if_playlist_link:
         message = re.split("si=", message, 1)
         message = re.sub("https://open.spotify.com/playlist/", "", message[0])
         message = message[:-1]
@@ -32,7 +36,8 @@ def check(message):
     else:
         return "There was something wrong with your link, please try again"
 
-#reply with a link or an error message
+
+# reply with a link or an error message
 def answer(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(check(update.message.text))
 

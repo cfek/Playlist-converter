@@ -15,10 +15,7 @@ yt_secret = os.environ.get('yt_secret')
 yt_scopes = ["https://www.googleapis.com/auth/youtube"]
 # youtube data api v3 token
 yt_api_key = os.environ.get('yt_api_key')
-
 name_artist = []
-spotify_playlist_id = "5PKZSKuHP4d27SXO5fB9Wl"
-
 
 
 # Spotify authorisation
@@ -47,7 +44,7 @@ def get_playlist_tracks(access_token, playlist_id):
 
 # get first video for each search query and compile into one anonymous youtube playlist
 def get_youtube_playlist():
-    tracks_and_names=[]
+    tracks_and_names = []
     playlist_link = "http://www.youtube.com/watch_videos?video_ids="
     for name in name_artist:
         youtube = build("youtube", "v3", developerKey=yt_api_key)
@@ -56,15 +53,13 @@ def get_youtube_playlist():
             q=name,
             maxResults=1)
         response = request.execute()
-        #playlist_link += response['items'][0]["id"]["videoId"] + ","
         tracks_and_names.append(response['items'][0]["id"]["videoId"])
-    playlist_link+=",".join(tracks_and_names)
+    playlist_link += ",".join(tracks_and_names)
 
     return playlist_link
+
 
 def spotify_to_youtube(spotify_playlist_id):
     token = spotify_authorise()["access_token"]
     get_playlist_tracks(token, spotify_playlist_id)
     return get_youtube_playlist()
-
-
